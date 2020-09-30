@@ -1,4 +1,28 @@
+// Class Eights {
+//     constructor() {
+//          this.one = Player();
+//          this.two = Player();
+//          this.drawPile = Hand();
+//          this.discardPile = Hand();
+//     }
+//     playGame() {
+//         Player player = one;
 
+//         // keep playing until there's a winner
+//         while (!isDone()) {
+//             displayState();
+//             takeTurn(player);
+//             player = nextPlayer(player);
+//         }
+
+//         // display the final score
+//         one.displayScore();
+//         two.displayScore();
+//     };
+//     isDone() {
+//         return one.hand.isEmpty() || two.hand.isEmpty();
+//     }
+// };
 class Card {
     constructor(suit, rank, value) {
         this.suit = suit;
@@ -59,36 +83,49 @@ class  Deck {
     }
 }
 
-let d = new Deck();
-d.createDeck();
-console.log(d.cards);
-d.shuffleDeck();
-console.log(d.cards);
-d.sortDeck(d.cards);
-console.log(d.cards);
+class Player {
+    constructor(name) {
+        this.playerName = name;
+        this.playerCards = [];
+        this.faceUpCards =[];
+    }
+}
+class Board {
+    constructor() {
+        this.cardsInMiddle = [];
+        this.players = [];
+        //this.faceUp=[];
+    }
+    start(playerOneName, playerTwoName) {
+        this.players.push(new Player(playerOneName));
+        this.players.push(new Player(playerTwoName));
+        let d = new Deck();
+        d.createDeck();
+        d.shuffleDeck();
+        this.players[0].playerCards = d.cards.slice(0, 10);
+       this.players[1].playerCards = d.cards.slice(10,20);
+       this.cardsInMiddle = d.cards.slice(20,52);
+      
+       this.players[0].faceUpCards = this.cardsInMiddle.splice(0,1);
+      // this.players[1].faceUpCards = this.cardsInMiddle.splice(0,1);
+     //console.log("this first face element ",this.players[0].faceUpCards[0].suit);
+      this.player1Turn();
+      // console.log(this.cardsInMiddle.length);
+    }
+    player1Turn() {
+        console.log("Face Up card is ", this.players[0].faceUpCards[0]);
+        console.log("player 1 is playing....Matched cards are... ");
+        for(let i=0;i<this.players[0].playerCards.length;i++){
+            if(this.players[0].faceUpCards[0].suit == this.players[0].playerCards[i].suit 
+                || this.players[0].faceUpCards[0].rank == this.players[0].playerCards[i].rank )
+            console.log(this.players[0].playerCards[i]);
+        }
+        return false;
+    }
+}
+let gameBoard = new Board();
+gameBoard.start('Jayashree', 'Soumya');
+console.log(gameBoard.players[0]);
 
-// Class Eights {
-//     constructor() {
-//          this.one = Player();
-//          this.two = Player();
-//          this.drawPile = Hand();
-//          this.discardPile = Hand();
-//     }
-//     playGame() {
-//         Player player = one;
 
-//         // keep playing until there's a winner
-//         while (!isDone()) {
-//             displayState();
-//             takeTurn(player);
-//             player = nextPlayer(player);
-//         }
 
-//         // display the final score
-//         one.displayScore();
-//         two.displayScore();
-//     };
-//     isDone() {
-//         return one.hand.isEmpty() || two.hand.isEmpty();
-//     }
-// };
