@@ -86,15 +86,14 @@ class  Deck {
 class Player {
     constructor(name) {
         this.playerName = name;
-        this.playerCards = [];
-        this.faceUpCards =[];
+        this.playerCards = []; 
     }
 }
 class Board {
     constructor() {
         this.cardsInMiddle = [];
         this.players = [];
-        //this.faceUp=[];
+        this.faceUpCards =[];
     }
     start(playerOneName, playerTwoName) {
         this.players.push(new Player(playerOneName));
@@ -102,30 +101,65 @@ class Board {
         let d = new Deck();
         d.createDeck();
         d.shuffleDeck();
-        this.players[0].playerCards = d.cards.slice(0, 10);
-       this.players[1].playerCards = d.cards.slice(10,20);
-       this.cardsInMiddle = d.cards.slice(20,52);
+        this.players[0].playerCards = d.cards.slice(0, 15);
+       this.players[1].playerCards = d.cards.slice(15,30);
+       this.cardsInMiddle = d.cards.slice(30,52);
       
-       this.players[0].faceUpCards = this.cardsInMiddle.splice(0,1);
+       this.faceUpCards = this.cardsInMiddle.splice(0,1);
       // this.players[1].faceUpCards = this.cardsInMiddle.splice(0,1);
-     //console.log("this first face element ",this.players[0].faceUpCards[0].suit);
-      this.player1Turn();
+     //console.log("this first face element ",this.faceUpCards[0].suit);
+      this.playersTurn();
       // console.log(this.cardsInMiddle.length);
     }
-    player1Turn() {
-        console.log("Face Up card is ", this.players[0].faceUpCards[0]);
+
+
+    playersTurn() {
+        let rankMatched = [];
+        let rankMatchedIndex = [];
+        let suitMatched;
+        let eightMatched;
+        console.log("Face Up card is ", this.faceUpCards[0]);
         console.log("player 1 is playing....Matched cards are... ");
         for(let i=0;i<this.players[0].playerCards.length;i++){
-            if(this.players[0].faceUpCards[0].suit == this.players[0].playerCards[i].suit 
-                || this.players[0].faceUpCards[0].rank == this.players[0].playerCards[i].rank )
-            console.log(this.players[0].playerCards[i]);
+            if(this.faceUpCards[0].rank == this.players[0].playerCards[i].rank) {
+                rankMatched.push(this.players[0].playerCards[i]);
+                rankMatchedIndex.push(i);
+                console.log("Rank matched with ",this.players[0].playerCards[i]);
+            }
+            if(this.faceUpCards[0].suit == this.players[0].playerCards[i].suit) {
+                suitMatched = this.players[0].playerCards[i]
+                //console.log("Suit matched with ",this.players[0].playerCards[i]);
+            }
+            if(this.players[0].playerCards[i].rank == 8) {
+                eightMatched = this.players[0].playerCards[i];
+                //console.log(" 8 is available ",this.players[0].playerCards[i]);
+            }
         }
+        console.log("Rank Matched Array ", rankMatched);
+        console.log("Suit Matched card ", suitMatched);
+        console.log("Card with 8 ", eightMatched);
+        
+        if(rankMatched.length != 0) {
+            this.faceUpCards[0] = rankMatched[rankMatched.length - 1];
+
+            for(let each of rankMatchedIndex) {
+                for(let i = each; i<this.players[0].playerCards.length; i++) {
+                    this.players[0].playerCards[i] = this.players[0].playerCards[i+1];
+                }
+            }
+            this.players[0].playerCards.length -=rankMatched.length;
+
+        }
+    
+        console.log("Now Face Up card is ----------> ", this.faceUpCards[0]);
+
+        console.log("Now First player has ",this.players[0].playerCards.length, "cards \n", this.players[0].playerCards );
         return false;
     }
 }
 let gameBoard = new Board();
 gameBoard.start('Jayashree', 'Soumya');
-console.log(gameBoard.players[0]);
+console.log(gameBoard.players[0].playerCards.length);
 
 
 
